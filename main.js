@@ -1,61 +1,149 @@
 // Function to edit the raw transcript
 const processTranscript = () => {
-  console.log("function start");
-  const outputText = document.getElementById("transcript-output");
-  let inputText = document.getElementById("transcript-input").value;
+  const outputElement = document.getElementById("transcript-output");
+  const inputElement = document.getElementById("transcript-input");
 
-  console.log(typeof inputText);
-
-  // Replace newlines with spaces
-  let data = inputText.replace(/\n/g, " ");
-
-  // Regular expression to match "thank you" (case insensitive, global)
-  const thankYouRegex = /thank you/gi;
-
-  // Count how many times "thank you" appears
-  const thankYouCount = (data.match(thankYouRegex) || []).length;
-
-  // If "thank you" exists, insert two empty lines before each occurrence
-  if (thankYouCount > 0) {
-    data = data.replace(thankYouRegex, "\n\nthank you");
+  if (!inputElement || !outputElement) {
+    console.error("Required elements not found");
+    return;
   }
 
-  console.log(`"thank you" appears ${thankYouCount} time(s).`);
-  console.log("text processed");
+  try {
+    const inputText = inputElement.value.trim();
 
-  // Display result and render newlines in HTML as <br>
-  outputText.innerHTML = data.replace(/\n/g, "<br>");
-  console.log("function end");
+    if (!inputText) {
+      showNotification("Please enter a transcript to process.", "warning");
+      return;
+    }
+
+    // Process the text
+    const processedText = inputText
+      .replace(/\s+/g, " ") // Normalize spaces
+    //   .replace(/\s*(prime minister)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
+    //   .replace(/\s*(deputy prime minister)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
+    //   .replace(/\s*(government member)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
+    //   .replace(/\s*(government whip)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
+    //   .replace(/\s*(leader of opposition)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
+    //   .replace(/\s*(deputy leader of opposition)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
+    //   .replace(/\s*(opposition whip)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
+    //   .replace(/\s*(opposition member)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
+      .replace(/\s*(call upon)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
+      .replace(/\s*(invite)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
+      .replace(/\s*(three two one)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
+      .trim(); // Remove leading/trailing whitespace
+
+    // Count "thank you" occurrences
+    const thankYouCount = (processedText.match(/thank you/gi) || []).length;
+
+    // Update output
+    // Use textContent to set the content, preserving newlines
+    outputElement.textContent = processedText;
+
+    // Provide user feedback
+    showNotification(
+      `Transcript processed.`
+    );
+
+    // Optional: Scroll to the output
+    outputElement.scrollIntoView({ behavior: "smooth", block: "start" });
+  } catch (error) {
+    console.error("Error processing transcript:", error);
+    showNotification(
+      "An error occurred while processing the transcript.",
+      "error"
+    );
+  }
 };
+
 // Function to copy the transcript
 const copyTranscript = () => {
-  const outputText = document.getElementById("transcript-output").textContent;
-  console.log("Copying transcript...");
+  const outputElement = document.getElementById("transcript-output");
+  const copyButton = document.querySelector(
+    ".button-container button:nth-child(2)"
+  );
+
+  if (!outputElement || !outputElement.innerHTML.trim()) {
+    showNotification(
+      "No text to copy. Please process a transcript first.",
+      "warning"
+    );
+    return;
+  }
+
+  // Get the text with newlines
+  const textToCopy = outputElement.innerHTML.replace(/<br>/g, "\n");
+
   navigator.clipboard
-    .writeText(outputText)
+    .writeText(textToCopy)
     .then(() => {
-      alert("Transcript copied to clipboard!");
+      showNotification("Transcript copied to clipboard!", "success");
+      copyButton.textContent = "Copied!";
+      setTimeout(() => (copyButton.textContent = "Copy"), 2000);
     })
     .catch((err) => {
       console.error("Failed to copy:", err);
-      alert("Failed to copy transcript to clipboard!");
+      showNotification(
+        "Failed to copy transcript to clipboard. Please try again.",
+        "error"
+      );
     });
+};
+
+// Helper function to show notifications
+const showNotification = (message, type) => {
+  const notification = document.createElement("div");
+  notification.textContent = message;
+  notification.className = `notification ${type}`;
+  document.body.appendChild(notification);
+
+  setTimeout(() => {
+    notification.classList.add("fadeout");
+    setTimeout(() => notification.remove(), 500);
+  }, 3000);
 };
 
 // Function to save the transcript
 const saveTranscript = () => {
-  const outputText = document.getElementById("transcript-output").textContent;
-  console.log("Saving transcript...");
-  const fileName = "transcript.txt";
-  const textToSave = outputText.textContent;
-  const blob = new Blob([textToSave], {
-    type: "text/plain;charset=utf-8",
-  });
-  const downloadLink = document.createElement("a");
-  downloadLink.setAttribute("href", URL.createObjectURL(blob));
-  downloadLink.setAttribute("download", fileName);
-  document.body.appendChild(downloadLink);
-  downloadLink.click();
-  document.body.removeChild(downloadLink);
-  alert("Transcript saved as " + fileName);
+  const outputElement = document.getElementById("transcript-output");
+
+  if (!outputElement || !outputElement.textContent.trim()) {
+    showNotification(
+      "No text to save. Please process a transcript first.",
+      "warning"
+    );
+    return;
+  }
+
+  // Use textContent to get the processed text with preserved newlines
+  const textToSave = outputElement.textContent;
+  const fileName = `transcript_${getFormattedDate()}.txt`;
+  const blob = new Blob([textToSave], { type: "text/plain;charset=utf-8" });
+
+  if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+    // For IE
+    window.navigator.msSaveOrOpenBlob(blob, fileName);
+  } else {
+    const downloadLink = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+
+    downloadLink.href = url;
+    downloadLink.download = fileName;
+    downloadLink.style.display = "none";
+    document.body.appendChild(downloadLink);
+
+    downloadLink.click();
+
+    setTimeout(() => {
+      document.body.removeChild(downloadLink);
+      URL.revokeObjectURL(url);
+    }, 100);
+  }
+
+  showNotification(`Transcript saved as ${fileName}`, "success");
+};
+
+// Helper function to get formatted date for filename (unchanged)
+const getFormattedDate = () => {
+  const now = new Date();
+  return now.toISOString().slice(0, 19).replace(/[-:]/g, "").replace("T", "_");
 };
