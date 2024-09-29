@@ -3,20 +3,57 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Transcript Editor</title>
-    <link rel="stylesheet" href="style.css">
+    <title>YouTube Transcript Formatter</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h1 id="title">YouTube Transcript Formater</h1>
-    <textarea id="transcript-input" placeholder="Enter text here..."></textarea>
+    <header>
+      <h1 id="title">YouTube Transcript Formatter</h1>
+      <button id="info-button" aria-label="Information">i</button>
+    </header>
+
+    <div id="info-popup" class="popup">
+      <div class="popup-content">
+        <h1>Welcome</h1>
+        <h2>
+          This page will help you edit a Youtube video transcript <br />
+          How to Use:
+        </h2>
+        <p>Open any video you want to transcript</p>
+        <p>Go to the video description and click the "more"</p>
+        <img src="./img/pic_1.jpeg" alt="Picture with an arrow pointing at the 'more' button" />
+        <p>
+          Click the "Show Transcript" and it'll show the transcript box on the
+          left side of the video
+        </p>
+        <img src="./img/pic_2.jpeg" alt='Picture with an arrow pointing at the "Show Transcript" button' />
+        <p>Toggle the timestamp</p>
+        <img src="./img/pic_3.jpeg" alt="Picture with an arrow pointing at the 'Toogle Timestamp' button" />
+        <p>Select the desired transcript and copy it</p>
+        <img src="./img/pic_4.jpeg" alt="Picture with an arrow pointing at crusor selecting the desired text">
+        <p>. Paste your YouTube transcript in the input box.</p>
+        <p>. Click "Edit" to process the transcript.</p>
+        <p>. Use "Copy" to copy the formatted transcript.</p>
+        <p>. Click "Save" to download the transcript as a text file.</p>
+        <button id="close-popup">Close</button>
+      </div>
+    </div>
+
+    <textarea
+      id="transcript-input"
+      placeholder="Paste your YouTube transcript here..."
+    ></textarea>
+
     <div class="button-container">
-      <button id="edit-input" onclick="processTranscript()">Edit</button>
-      <button id="copy-output" onclick="copyTranscript()">Copy</button>
-      <button id="save-output" onclick="saveTranscript()">Save</button>
+      <button onclick="processTranscript()">Edit</button>
+      <button onclick="copyTranscript()">Copy</button>
+      <button onclick="saveTranscript()">Save</button>
     </div>
+
     <div id="container">
-      <p id="transcript-output"></p>
+      <pre id="transcript-output"></pre>
     </div>
-    <script src="./main.js"></script>
+
+    <script src="main.js"></script>
   </body>
 </html>
