@@ -19,14 +19,14 @@ const processTranscript = () => {
     // Process the text
     const processedText = inputText
       .replace(/\s+/g, " ") // Normalize spaces
-      //   .replace(/\s*(prime minister)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
-      //   .replace(/\s*(deputy prime minister)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
-      //   .replace(/\s*(government member)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
-      //   .replace(/\s*(government whip)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
-      //   .replace(/\s*(leader of opposition)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
-      //   .replace(/\s*(deputy leader of opposition)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
-      //   .replace(/\s*(opposition whip)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
-      //   .replace(/\s*(opposition member)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
+      .replace(/\s*(prime minister)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
+      .replace(/\s*(deputy prime minister)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
+      .replace(/\s*(government member)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
+      .replace(/\s*(government whip)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
+      .replace(/\s*(leader of opposition)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
+      .replace(/\s*(deputy leader of opposition)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
+      .replace(/\s*(opposition whip)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
+      .replace(/\s*(opposition member)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
       .replace(/\s*(call upon)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
       .replace(/\s*(invite)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
       .replace(/\s*(three two one)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
