@@ -216,3 +216,75 @@ header {
 }
 
 /* Existing styles... */
+
+/* Existing styles... */
+
+/* Updated styles for popup content and images */
+.popup-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  max-width: 90%;
+  max-height: 90%;
+  overflow-y: auto;
+  box-shadow: var(--shadow);
+}
+
+.popup-content h2 {
+  margin-top: 0;
+  color: var(--primary-color);
+  font-size: 24px;
+}
+
+.popup-content h3 {
+  font-size: 18px;
+  color: var(--secondary-color);
+}
+
+.popup-content h4 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.popup-content ol {
+  padding-left: 20px;
+}
+
+.popup-content li {
+  margin-bottom: 15px;
+}
+
+.image-container {
+  margin: 10px 0;
+  text-align: center;
+}
+
+.instruction-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#close-popup {
+  display: block;
+  margin: 20px auto 0;
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 16px;
+}
+
+#close-popup:hover {
+  background-color: #f74c4ca8;
+}
+
+/* Existing styles... */
