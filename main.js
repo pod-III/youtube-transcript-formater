@@ -7,6 +7,45 @@ const processTranscript = () => {
     console.error("Required elements not found");
     return;
   }
+  try {
+    const inputText = inputElement.value.trim();
+    if (!inputText) {
+      showNotification("Please enter a transcript to process.", "warning");
+      return;
+    }
+
+    // Process the text
+    const processedText = inputText
+      .replace(/\s+/g, " ") // Normalize spaces
+      .trim(); // Remove leading/trailing whitespace
+
+    // Update output
+    // Use textContent to set the content, preserving newlines
+    outputElement.textContent = processedText;
+
+    // Provide user feedback
+    showNotification(`Transcript separation processed.`);
+
+    // Optional: Scroll to the output
+    outputElement.scrollIntoView({ behavior: "smooth", block: "start" });
+  } catch (error) {
+    console.error("Error processing transcript:", error);
+    showNotification(
+      "An error occurred while processing the transcript.",
+      "error"
+    );
+  }
+};
+
+/// Function to separate the raw transcript
+const separateTranscript = () => {
+  const outputElement = document.getElementById("transcript-output");
+  const inputElement = document.getElementById("transcript-input");
+
+  if (!inputElement || !outputElement) {
+    console.error("Required elements not found");
+    return;
+  }
 
   try {
     const inputText = inputElement.value.trim();
@@ -19,28 +58,18 @@ const processTranscript = () => {
     // Process the text
     const processedText = inputText
       .replace(/\s+/g, " ") // Normalize spaces
-      .replace(/\s*(prime minister)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
-      .replace(/\s*(deputy prime minister)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
-      .replace(/\s*(government member)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
-      .replace(/\s*(government whip)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
-      .replace(/\s*(leader of opposition)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
-      .replace(/\s*(deputy leader of opposition)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
-      .replace(/\s*(opposition whip)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
-      .replace(/\s*(opposition member)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
-      .replace(/\s*(call upon)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
-      .replace(/\s*(invite)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
-      .replace(/\s*(three two one)\s*/gi, "\n\n$1\n\n") // Add newlines around "thank you"
+      .replace(
+        /\s*(prime minister|deputy prime minister|government member|member of government|government whip|leader of(?:\s+the)?\s+opposition|deputy leader of opposition|opposition whip|opposition member|member of opposition|call upon|invite|three two one)\s*/gi,
+        "\n\n$1\n\n"
+      )
       .trim(); // Remove leading/trailing whitespace
-
-    // Count "thank you" occurrences
-    const thankYouCount = (processedText.match(/thank you/gi) || []).length;
 
     // Update output
     // Use textContent to set the content, preserving newlines
     outputElement.textContent = processedText;
 
     // Provide user feedback
-    showNotification(`Transcript processed.`);
+    showNotification(`Transcript separation processed.`);
 
     // Optional: Scroll to the output
     outputElement.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -52,6 +81,9 @@ const processTranscript = () => {
     );
   }
 };
+
+// Process the text
+const processedText = inputText.trim(); // Remove leading/trailing whitespace
 
 // Function to copy the transcript
 const copyTranscript = () => {
