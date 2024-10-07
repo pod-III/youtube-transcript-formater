@@ -7,6 +7,7 @@ const processTranscript = () => {
     console.error("Required elements not found");
     return;
   }
+
   try {
     const inputText = inputElement.value.trim();
     if (!inputText) {
@@ -20,13 +21,9 @@ const processTranscript = () => {
       .trim(); // Remove leading/trailing whitespace
 
     // Update output
-    // Use textContent to set the content, preserving newlines
     outputElement.textContent = processedText;
 
-    // Provide user feedback
-    showNotification(`Transcript separation processed.`);
-
-    // Optional: Scroll to the output
+    showNotification("Transcript processed successfully.");
     outputElement.scrollIntoView({ behavior: "smooth", block: "start" });
   } catch (error) {
     console.error("Error processing transcript:", error);
@@ -37,7 +34,7 @@ const processTranscript = () => {
   }
 };
 
-/// Function to separate the raw transcript
+// Function to separate the raw transcript
 const separateTranscript = () => {
   const outputElement = document.getElementById("transcript-output");
   const inputElement = document.getElementById("transcript-input");
@@ -49,7 +46,6 @@ const separateTranscript = () => {
 
   try {
     const inputText = inputElement.value.trim();
-
     if (!inputText) {
       showNotification("Please enter a transcript to process.", "warning");
       return;
@@ -64,14 +60,9 @@ const separateTranscript = () => {
       )
       .trim(); // Remove leading/trailing whitespace
 
-    // Update output
-    // Use textContent to set the content, preserving newlines
     outputElement.textContent = processedText;
 
-    // Provide user feedback
-    showNotification(`Transcript separation processed.`);
-
-    // Optional: Scroll to the output
+    showNotification("Transcript separation processed successfully.");
     outputElement.scrollIntoView({ behavior: "smooth", block: "start" });
   } catch (error) {
     console.error("Error processing transcript:", error);
@@ -82,17 +73,14 @@ const separateTranscript = () => {
   }
 };
 
-// Process the text
-const processedText = inputText.trim(); // Remove leading/trailing whitespace
-
 // Function to copy the transcript
 const copyTranscript = () => {
   const outputElement = document.getElementById("transcript-output");
   const copyButton = document.querySelector(
-    ".button-container button:nth-child(2)"
+    ".button-container button:nth-child(3)"
   );
 
-  if (!outputElement || !outputElement.innerHTML.trim()) {
+  if (!outputElement || !outputElement.textContent.trim()) {
     showNotification(
       "No text to copy. Please process a transcript first.",
       "warning"
@@ -100,11 +88,8 @@ const copyTranscript = () => {
     return;
   }
 
-  // Get the text with newlines
-  const textToCopy = outputElement.innerHTML.replace(/<br>/g, "\n");
-
   navigator.clipboard
-    .writeText(textToCopy)
+    .writeText(outputElement.textContent)
     .then(() => {
       showNotification("Transcript copied to clipboard!", "success");
       copyButton.textContent = "Copied!";
@@ -120,7 +105,7 @@ const copyTranscript = () => {
 };
 
 // Helper function to show notifications
-const showNotification = (message, type) => {
+const showNotification = (message, type = "success") => {
   const notification = document.createElement("div");
   notification.textContent = message;
   notification.className = `notification ${type}`;
@@ -144,7 +129,6 @@ const saveTranscript = () => {
     return;
   }
 
-  // Use textContent to get the processed text with preserved newlines
   const textToSave = outputElement.textContent;
   const fileName = `transcript_${getFormattedDate()}.txt`;
   const blob = new Blob([textToSave], { type: "text/plain;charset=utf-8" });
@@ -172,11 +156,12 @@ const saveTranscript = () => {
   showNotification(`Transcript saved as ${fileName}`, "success");
 };
 
-// Helper function to get formatted date for filename (unchanged)
+// Helper function to get formatted date for filename
 const getFormattedDate = () => {
-  const now = new Date();
-  return now.toISOString().slice(0, 19).replace(/[-:]/g, "").replace("T", "_");
+  return new Date().toISOString().slice(0, 19).replace(/[-:T]/g, "_");
 };
+
+// Pop Up functions
 const showInfoPopup = () => {
   document.getElementById("info-popup").style.display = "block";
 };
@@ -187,15 +172,11 @@ const closeInfoPopup = () => {
 
 // Event listeners
 document.addEventListener("DOMContentLoaded", () => {
-  // Show popup on page load
   showInfoPopup();
 
-  // Info button click event
   document
     .getElementById("info-button")
     .addEventListener("click", showInfoPopup);
-
-  // Close button click event
   document
     .getElementById("close-popup")
     .addEventListener("click", closeInfoPopup);
@@ -206,4 +187,18 @@ document.addEventListener("DOMContentLoaded", () => {
       closeInfoPopup();
     }
   });
+
+  // Add event listeners for buttons
+  document
+    .querySelector(".button-container button:nth-child(1)")
+    .addEventListener("click", processTranscript);
+  document
+    .querySelector(".button-container button:nth-child(2)")
+    .addEventListener("click", separateTranscript);
+  document
+    .querySelector(".button-container button:nth-child(3)")
+    .addEventListener("click", copyTranscript);
+  document
+    .querySelector(".button-container button:nth-child(4)")
+    .addEventListener("click", saveTranscript);
 });

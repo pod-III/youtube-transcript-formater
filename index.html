@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>YouTube Transcript Formatter</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/x-icon" href="./img/youtube.png">
   </head>
   <body>
     <header>
@@ -12,17 +13,33 @@
       <button id="info-button" aria-label="Information">i</button>
     </header>
 
+    <main>
+      <textarea
+        id="transcript-input"
+        placeholder="Paste your YouTube transcript here"
+      ></textarea>
+
+      <div class="button-container">
+        <button onclick="processTranscript()">Edit</button>
+        <button onclick="separateTranscript()">Separate</button>
+        <button onclick="copyTranscript()">Copy</button>
+        <button onclick="saveTranscript()">Save</button>
+      </div>
+
+      <div id="container">
+        <pre id="transcript-output"></pre>
+      </div>
+    </main>
+
     <div id="info-popup" class="popup">
       <div class="popup-content">
         <h2>Welcome</h2>
         <h3>This page will help you edit a YouTube video transcript</h3>
         <h4>How to Use:</h4>
         <ol>
+          <li>Open any video you want to transcript</li>
           <li>
-            <p>Open any video you want to transcript</p>
-          </li>
-          <li>
-            <p>Go to the video description and click the "more"</p>
+            Go to the video description and click the "more"
             <div class="image-container">
               <img
                 src="./img/pic_1.jpeg"
@@ -32,10 +49,8 @@
             </div>
           </li>
           <li>
-            <p>
-              Click the "Show Transcript" and it'll show the transcript box on
-              the left side of the video
-            </p>
+            Click the "Show Transcript" and it'll show the transcript box on the
+            left side of the video
             <div class="image-container">
               <img
                 src="./img/pic_2.jpeg"
@@ -45,7 +60,7 @@
             </div>
           </li>
           <li>
-            <p>Toggle the timestamp</p>
+            Toggle the timestamp
             <div class="image-container">
               <img
                 src="./img/pic_3.jpeg"
@@ -55,7 +70,7 @@
             </div>
           </li>
           <li>
-            <p>Select the desired transcript and copy it</p>
+            Select the desired transcript and copy it
             <div class="image-container">
               <img
                 src="./img/pic_4.jpeg"
@@ -66,28 +81,22 @@
           </li>
           <li>Paste your YouTube transcript in the input box.</li>
           <li>Click "Edit" to process the transcript.</li>
-          <li>Click "Separate" to separate  the processed transcript</li>
+          <li>
+            Click "Separate" to separate the processed transcript:
+            <ul>
+              <li>
+                Separate button separates the text based on few key words or
+                phrase that might signified that a different speaker is speaking
+                (e.g. "three, two, one" or "prime minister")
+              </li>
+              <li>These phrases is hard coded, and if you have suggestion, please post an issue on <a href="https://github.com/pod-III/youtube-transcript-formater" >GitHub</a></li>
+            </ul>
+          </li>
           <li>Use "Copy" to copy the formatted transcript.</li>
           <li>Click "Save" to download the transcript as a text file.</li>
         </ol>
         <button id="close-popup">Close</button>
       </div>
-    </div>
-
-    <textarea
-      id="transcript-input"
-      placeholder="Paste your YouTube transcript here..."
-    ></textarea>
-
-    <div class="button-container">
-      <button onclick="processTranscript()">Edit</button>
-      <button onclick="separateTranscript()">Separate</button>
-      <button onclick="copyTranscript()">Copy</button>
-      <button onclick="saveTranscript()">Save</button>
-    </div>
-
-    <div id="container">
-      <pre id="transcript-output"></pre>
     </div>
 
     <script src="main.js"></script>
